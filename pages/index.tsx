@@ -12,6 +12,7 @@ import {
   OpenAIModel,
   OpenAIModelID,
   OpenAIModels,
+  LlamaModels,
 } from '@/types/openai';
 import { Prompt } from '@/types/prompt';
 import {
@@ -255,7 +256,7 @@ const Home: React.FC<HomeProps> = ({
           code: data.error?.code,
           messageLines: [data.error?.message],
         });
-      } catch (e) {}
+      } catch (e) { }
       setModelError(error);
       return;
     }

@@ -3,3 +3,6 @@ export const DEFAULT_SYSTEM_PROMPT =
 
 export const OPENAI_API_HOST =
   process.env.OPENAI_API_HOST || 'https://api.openai.com';
+
+export const LLAMA_API_HOST =
+  process.env.LLAMA_API_HOST || 'http://127.0.0.1:8000';
