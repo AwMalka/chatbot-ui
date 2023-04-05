@@ -5,7 +5,7 @@ import {
   ParsedEvent,
   ReconnectInterval,
 } from 'eventsource-parser';
-import { OPENAI_API_HOST, LLAMA_API_HOST } from '../app/const';
+import { OPENAI_API_HOST, LLAMA_API_HOST, LLAMA_STREAM_MODE } from '../app/const';
 
 export class OpenAIError extends Error {
   type: string;
@@ -28,6 +28,7 @@ export const OpenAIStream = async (
   messages: Message[],
 ) => {
   const api_host = is_llama(model.id) ? LLAMA_API_HOST : OPENAI_API_HOST;
+  const streaming = !is_llama(model.id) || (LLAMA_STREAM_MODE === '1');
   const res = await fetch(`${api_host}/v1/chat/completions`, {
     headers: {
       'Content-Type': 'application/json',
@@ -48,7 +49,7 @@ export const OpenAIStream = async (
       ],
       max_tokens: 1000,
       temperature: 1,
-      stream: true,
+      stream: streaming,
     }),
   });
 
@@ -72,7 +73,7 @@ export const OpenAIStream = async (
     }
   }
 
-  const stream = is_llama(model.id) ?
+  const stream = !streaming ?
     new ReadableStream({
       async start(controller) {
         try {
