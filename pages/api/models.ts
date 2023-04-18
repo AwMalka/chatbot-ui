@@ -59,35 +59,17 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('http_models: ' + JSON.stringify(json));
 
     const models: OpenAIModel[] = json.data
-     .map((model: any) => {
-      for (const [key, value] of Object.entries(OpenAIModelID)) {
-        if (value === model.id) {
-          return {
-            id: model.id,
-            name: OpenAIModels[value].name,
-          };
+      .map((model: any) => {
+        for (const [key, value] of Object.entries(OpenAIModelID)) {
+          if (value === model.id) {
+            return {
+              id: model.id,
+              name: OpenAIModels[value].name,
+            };
+          }
         }
-      }
-      // if (model.owned_by === 'organization-owner') {
-      //   return {
-      //     id: model.id,
-      //     name: 'LLaMA.CPP - ' + model.id,
-      //   };  
-      // }
-    });
-
-    // const models: OpenAIModel[] = json.data
-    //   .map((model: any) => {
-    //     for (const [key, value] of Object.entries(OpenAIModelID)) {
-    //       if (value === model.id) {
-    //         return {
-    //           id: model.id,
-    //           name: OpenAIModels[value].name,
-    //         };
-    //       }
-    //     }
-    //   })
-    //   .filter(Boolean);
+      })
+      .filter(Boolean);
 
     return new Response(JSON.stringify(models), { status: 200 });
   } catch (error) {
