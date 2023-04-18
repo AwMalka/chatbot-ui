@@ -68,10 +68,12 @@ const handler = async (req: Request): Promise<Response> => {
           };
         }
       }
-      return {
-        id: model.id,
-        name: model.id,
-      };
+      // if (model.owned_by === 'organization-owner') {
+      //   return {
+      //     id: model.id,
+      //     name: 'LLaMA.CPP - ' + model.id,
+      //   };  
+      // }
     });
 
     // const models: OpenAIModel[] = json.data
