@@ -48,27 +48,44 @@ const handler = async (req: Request): Promise<Response> => {
       });
     } else if (llama_response.status !== 200) {
       console.error(
-        `OpenAI API returned an error ${llama_response.status
+        `LLaMA Server returned an error ${llama_response.status
         }: ${await llama_response.text()}`,
       );
-      throw new Error('OpenAI API returned an error');
+      throw new Error('LLaMA Server returned an error');
     }
 
     const llama_json = await llama_response.json();
     json.data.push(...llama_json.data)
+    console.log('http_models: ' + JSON.stringify(json));
 
     const models: OpenAIModel[] = json.data
-      .map((model: any) => {
-        for (const [key, value] of Object.entries(OpenAIModelID)) {
-          if (value === model.id) {
-            return {
-              id: model.id,
-              name: OpenAIModels[value].name,
-            };
-          }
+     .map((model: any) => {
+      for (const [key, value] of Object.entries(OpenAIModelID)) {
+        if (value === model.id) {
+          return {
+            id: model.id,
+            name: OpenAIModels[value].name,
+          };
         }
-      })
-      .filter(Boolean);
+      }
+      return {
+        id: model.id,
+        name: model.id,
+      };
+    });
+
+    // const models: OpenAIModel[] = json.data
+    //   .map((model: any) => {
+    //     for (const [key, value] of Object.entries(OpenAIModelID)) {
+    //       if (value === model.id) {
+    //         return {
+    //           id: model.id,
+    //           name: OpenAIModels[value].name,
+    //         };
+    //       }
+    //     }
+    //   })
+    //   .filter(Boolean);
 
     return new Response(JSON.stringify(models), { status: 200 });
   } catch (error) {
